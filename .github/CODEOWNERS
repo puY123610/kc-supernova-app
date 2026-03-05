@@ -1,0 +1,11 @@
+# Global default reviewer owner
+* @puY123610
+
+# Sensitive modules require security review
+/src/auth/ @puY123610
+/src/payment/ @puY123610
+/src/orders/ @puY123610
+
+# CI/CD and infrastructure
+/.github/workflows/ @puY123610
+/infra/ @puY123610
