@@ -18,7 +18,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
       - name: Run lint (or skip for bootstrap repo)
         run: |
           if [ ! -f package.json ]; then
@@ -41,7 +40,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
       - name: Run unit tests (or skip for bootstrap repo)
         run: |
           if [ ! -f package.json ]; then
@@ -64,7 +62,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
       - name: Run E2E tests (or skip for bootstrap repo)
         run: |
           if [ ! -f package.json ]; then
