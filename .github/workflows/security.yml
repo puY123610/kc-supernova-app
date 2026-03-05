@@ -31,6 +31,8 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,9 +46,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-      - run: npx --yes osv-scanner@latest --recursive . --output=osv-results.json
-      - run: |
+      - name: Run dependency scan (or skip for bootstrap repo)
+        run: |
+          if [ ! -f package.json ]; then
+            echo "No package.json found; bootstrap repo dependency scan skipped."
+            exit 0
+          fi
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --package-lock-only
+            npm ci
+          fi
+          npx --yes osv-scanner@latest --recursive . --output=osv-results.json
           if [ -s osv-results.json ] && ! grep -q '"vulns": \[\]' osv-results.json; then
             echo "Dependency vulnerabilities found"
             cat osv-results.json
